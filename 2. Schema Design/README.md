@@ -34,7 +34,7 @@ To assist in this part of the schema design, the client has provided a list of m
 <img src="https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/55ad1352-2f63-4c3f-99ac-bc3435c2c821"  
      height="400" />
 
-This is how the schema design will look like with menu item added. Comparing to the first orders table, it is much more effective without the redundant data.
+This is how the schema design will look like with menu item added. Comparing to the first orders table, it is much more effective without the redundant data. This table will greatly help for our next objective of inventory control.
 
 <img src="https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/9389d8fc-b487-46c5-ba96-c8eb7542ae6e"  
      height="400" />
