@@ -7,7 +7,7 @@ In this repo, you can find different folders discussing my thought-process in ea
 + Project Brief
 + Database Design
 + SQL Queries
-+ Dashboards
++ Dashboard Creation
 
 ## Tools Used
 + Microsoft Excel
