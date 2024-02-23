@@ -1,3 +1,5 @@
+# 💡 Schema Design
+
 ## Target Areas
 There are two main areas the client brief wants to concentrate on: 
 + Customer Orders
