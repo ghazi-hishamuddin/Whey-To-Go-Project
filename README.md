@@ -4,9 +4,9 @@ In this project, I dove into the exciting world of SQL database design and devel
 
 ## Table of Contents
 In this repo, you can find different folders discussing my thought-process in each individual step.
-+ Project Brief
-+ Schema Design
-+ SQL Queries
++ <a Project Brief </a>
++ <a href="" Schema Design </a>
++ <a href="https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/tree/main/3.%20SQL%20Querying">SQL Queries</a>
 + Dashboard Creation
 
 ## Tools Used
