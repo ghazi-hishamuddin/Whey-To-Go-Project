@@ -90,5 +90,5 @@ Relationships between tables:
 
 These relationships allow for linking data across different tables, enabling efficient retrieval and analysis of information related to recipes, menu items, ingredients, and inventory.
 
-With all this data, the client can calculate exactly how much each smoothie costs to make. If supply prices go up, she just needs to update the ingredient prices in ingredient table. Additionally, she can do calculations for when to stock up on ingredients, in the inventory table. With the schema design completed, let's move on to SQL querying!
+With all this data, the client can calculate exactly how much each smoothie costs to make. If supply prices go up, she just needs to update the ingredient prices in ingredient table. Additionally, she can do calculations for when to stock up on ingredients, in the inventory table. With the schema design completed, let's move on to <a href="https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/tree/main/3.%20SQL%20Querying">SQL querying</a>!
 
