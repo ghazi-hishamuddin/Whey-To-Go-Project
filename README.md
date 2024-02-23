@@ -5,7 +5,7 @@ In this project, I dove into the exciting world of SQL database design and devel
 ## Table of Contents
 In this repo, you can find different folders discussing my thought-process in each individual step.
 + Project Brief
-+ Database Design
++ Schema Design
 + SQL Queries
 + Dashboard Creation
 
