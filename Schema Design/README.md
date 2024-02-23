@@ -15,11 +15,10 @@ This how it will look like when populated:
 
 ![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/f07a2f07-388d-4686-a5d6-cdb600d2ee5b)
 
-This is datatypes proposed in the schema design:
+This is the datatypes proposed in the schema design:
 
 <img src="https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/7ab337b5-78b1-4b70-ab31-fa33b912b20d)g"  
      height="400" />
-
 
 To optimize efficiency and reduce redundancy in the order data, I propose a normalization approach by introducing identifiers for both customer names and their addresses. This streamlined schema design aims to enhance data management and retrieval. Here's the drafted schema:
 
@@ -27,3 +26,16 @@ To optimize efficiency and reduce redundancy in the order data, I propose a norm
      height="400" />
 
 This will serve two main purposes: Reduce the amount of data in the orders table and provides an efficient and futureproof database if my client needs to ever make changes to the name of an item.
+
+<hr>
+
+To assist in this part of the schema design, the client has provided a list of menu items she sells. This information can be gathered by the docx file provided in the <a href="https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/tree/main/Project%20Brief">Project Brief</a> folder. We will port this information to a spreadsheet.
+
+<img src="https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/55ad1352-2f63-4c3f-99ac-bc3435c2c821"  
+     height="400" />
+
+This is how the schema design will look like with menu item added. Comparing to the first orders table, it is much more effective without the redundant data.
+
+<img src="https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/9389d8fc-b487-46c5-ba96-c8eb7542ae6e"  
+     height="400" />
+
