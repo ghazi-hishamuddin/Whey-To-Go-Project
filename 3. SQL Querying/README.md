@@ -133,17 +133,17 @@ I will use the import wizard function of MySQL to populate each table in MySQL s
 SELECT * FROM address;
 SELECT * FROM customers;
 SELECT * FROM ingredient;
-SELECT * FROM inventory;
 SELECT * FROM menu_item;
 SELECT * FROM orders;
+SELECT * FROM inventory;
 SELECT * FROM recipe;
 ```
 ![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/0807e5b2-e762-4215-8f08-762e62596b82)
-![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/87536f46-6e37-486b-87ce-4f1797e74123)
+![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/45532694-8413-4c7e-a778-0c7d7320aca3)
 ![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/ff1a6d05-cc69-4a21-9235-b836552ee86c)
+![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/57a5efc9-d160-4ba5-bb4b-c6cbc864cf75)
+![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/64102e09-a219-4123-bf7a-9e6b809b7e43)
 ![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/15038295-0798-4043-9408-b50675ca65bf)
-![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/0c51bff4-9cea-45cd-99ce-fdc46a421f0d)
-![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/4f58a126-ac2d-4604-abbd-baff42bb4f70)
 ![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/e67e7e2c-9e8e-49bc-a701-a7c3531132f6)
 
 Everything looks to be in order! Let's move on to our first objective.
