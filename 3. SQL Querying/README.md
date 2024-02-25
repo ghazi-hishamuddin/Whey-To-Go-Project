@@ -6,8 +6,8 @@ Throughout this phase, we'll dive into the intricacies of SQL querying, focusing
 
 ## Objectives
 There are two objectives aimed in this segment. Sales and inventory data. We want to show ample information on each dashboard to reflect client's data requirements. She has provided a few things she wants to see:
-+ <a href="D1">Objective 1:</a> Total orders, total sales, total items, average order value, top selling items, orders per day, sales per day, orders by address, orders by delivery or pickup 
-+ <a href="D2">Objective 2:</a> Inventory Overview: Total quantity by ingredient, total cost of ingredients, cost price of smoothies, percentage stock remaining by ingredient, list of ingreidents to replenish based on                                    remaining stocks
++ <a href="#D1">Objective 1:</a> Total orders, total sales, total items, average order value, top selling items, orders per day, sales per day, orders by address, orders by delivery or pickup 
++ <a href="#D2">Objective 2:</a> Inventory Overview: Total quantity by ingredient, total cost of ingredients, cost price of smoothies, percentage stock remaining by ingredient, list of ingreidents to replenish based on                                    remaining stocks
 <hr>
 
 ## Creating Database and Tables
@@ -148,7 +148,7 @@ SELECT * FROM recipe;
 
 Everything looks to be in order! Let's move on to our first objective.
 
-## Objective 1:
+## <a id="D1">Objective 1:</a>
 
 			
 
