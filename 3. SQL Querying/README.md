@@ -6,8 +6,8 @@ Throughout this phase, we'll dive into the intricacies of SQL querying, focusing
 
 ## Objectives
 There are two objectives aimed in this segment. Sales and inventory data. We want to show ample information on each dashboard to reflect client's data requirements. She has provided a few things she wants to see:
-+ <a href="#D1">Objective 1:</a> Total orders, total sales, total items, average order value, top selling items, orders per day, sales per day, orders by address, orders by delivery or pickup 
-+ <a href="#D2">Objective 2:</a> Inventory Overview: Total quantity by ingredient, total cost of ingredients, cost price of smoothies, percentage stock remaining by ingredient, list of ingreidents to replenish based on                                    remaining stocks
++ Objective 1: Total orders, total sales, total items sold, average order value, sales per item, top selling items, orders per day, sales per day, orders by address, orders by delivery or pickup 
++ Objective 2: Inventory Overview: Total quantity by ingredient, total cost of ingredients, cost price of smoothies, percentage stock remaining by ingredient, list of ingreidents to replenish based on                                    remaining stocks
 <hr>
 
 ## Creating Database and Tables
@@ -148,7 +148,43 @@ SELECT * FROM recipe;
 
 Everything looks to be in order! Let's move on to our first objective.
 
-## <a id="D1">Objective 1:</a>
+## Objective 1:
+Mentioned previously, these are the data needed to create the first dashboard:
+<ol>
+	<li>Total orders</li>
+	<li>Total sales</li>
+	<li>Total items sold</li>
+	<li>Average order value</li>
+	<li>Sales per item</li>
+	<li>Top selling items</li>
+	<li>Orders per day</li>
+	<li>Sales per day</li>
+	<li>Orders by address</li>
+	<li>Orders by delivery or pickup</li>
+</ol>
 
+This should be straightforward, as we will just have to use a left join from the orders table to each respective table. Most of the information ca
+
+``` sql
+
+SELECT
+    o.order_id,
+    m.item_price,
+    o.quantity,
+    m.item_name,
+    o.created_at,
+    a.address1,
+    a.address2,
+    a.city,
+    a.postal_code,
+    o.delivery
+   
+FROM orders o
+	LEFT JOIN menu_item m
+		ON o.item_id = m.item_id
+	LEFT JOIN address a
+		ON o.add_id = a.add_id;
+
+```
 			
 
