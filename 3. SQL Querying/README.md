@@ -1,3 +1,17 @@
+# 👨‍💻 SQL Querying
+
+## Introduction
+Welcome to the SQL querying phase of the project. In this repo, I'll guide you through each step of the SQL querying process, providing considerations for the queries that will be used in the dashboard design.
+Throughout this phase, we'll dive into the intricacies of SQL querying, focusing on extracting and manipulating the data needed for the dashboard. I'll be using MySQL server and workbench.
+
+## Objectives
+There are two objectives aimed in this segment. Sales and inventory data. We want to show ample information on each dashboard to reflect client's data requirements. She has provided a few things she wants to see:
++ <a href="D1">Objective 1:</a> Total orders, total sales, total items, average order value, top selling items, orders per day, sales per day, orders by address, orders by delivery or pickup 
++ <a href="D2">Objective 2:</a> Inventory Overview: Total quantity by ingredient, total cost of ingredients, cost price of smoothies, percentage stock remaining by ingredient, list of ingreidents to replenish based on                                    remaining stocks
+<hr>
+
+## Creating Database and Tables
+
 ``` sql
 -- Create database
 
@@ -108,6 +122,33 @@ ALTER TABLE `ingredient` ADD CONSTRAINT `fk_ingredient_ing_id` FOREIGN KEY(`ing_
 
 ALTER TABLE `recipe` ADD CONSTRAINT `fk_recipe_recipe_id` FOREIGN KEY(`recipe_id`) REFERENCES `menu_item` (`sku`);
 
-ALTER TABLE `inventory` ADD CONSTRAINT `fk_inventory_item_id` FOREIGN KEY(`item_id`) REFERENCES `recipe` (`ing_id`);
-
 ```
+
+## Populating Tables in MySQL
+I will use the import wizard function of MySQL to populate each table in MySQL server:
+
+![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/7a3aa86e-a386-4fdf-a699-e46fd52e4f98)
+
+``` sql
+SELECT * FROM address;
+SELECT * FROM customers;
+SELECT * FROM ingredient;
+SELECT * FROM inventory;
+SELECT * FROM menu_item;
+SELECT * FROM orders;
+SELECT * FROM recipe;
+```
+![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/0807e5b2-e762-4215-8f08-762e62596b82)
+![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/87536f46-6e37-486b-87ce-4f1797e74123)
+![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/ff1a6d05-cc69-4a21-9235-b836552ee86c)
+![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/15038295-0798-4043-9408-b50675ca65bf)
+![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/0c51bff4-9cea-45cd-99ce-fdc46a421f0d)
+![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/4f58a126-ac2d-4604-abbd-baff42bb4f70)
+![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/e67e7e2c-9e8e-49bc-a701-a7c3531132f6)
+
+Everything looks to be in order! Let's move on to our first objective.
+
+## Objective 1:
+
+			
+
