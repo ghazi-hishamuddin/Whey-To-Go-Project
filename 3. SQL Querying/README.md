@@ -7,7 +7,7 @@ Throughout this phase, we'll dive into the intricacies of SQL querying, focusing
 ## Objectives
 There are two objectives aimed in this segment. Sales and inventory data. We want to show ample information on each dashboard to reflect client's data requirements. She has provided a few things she wants to see:
 + Objective 1: Total orders, total sales, total items sold, average order value, sales per item, top selling items, orders per day, sales per day, orders by address, orders by delivery or pickup 
-+ Objective 2: Inventory Overview: Total quantity by ingredient, total cost of ingredients, cost price of smoothies, percentage stock remaining by ingredient, list of ingreidents to replenish based on                                    remaining stocks
++ Objective 2: Inventory Overview: Total quantity by ingredient, total cost of ingredients, cost price of smoothies, percentage stock remaining by ingredient, list of ingreidents to replenish based on remaining stocks
 <hr>
 
 ## Creating Database and Tables
@@ -163,9 +163,10 @@ Mentioned previously, these are the data needed to create the first dashboard:
 	<li>Orders by delivery or pickup</li>
 </ol>
 
-This should be straightforward, as we will just have to use a left join from the orders table to each respective table. Most of the information ca
+This should be straightforward, as we will just have to use a left join from the orders table to each respective table. Most of the information can be extracted from the orders, menu_item and address table. I will use this query for the visualization tool later on.
 
 ``` sql
+USE wheytogo;
 
 SELECT
     o.order_id,
@@ -184,7 +185,66 @@ FROM orders o
 		ON o.item_id = m.item_id
 	LEFT JOIN address a
 		ON o.add_id = a.add_id;
-
 ```
-			
+<hr>
 
+## Objective 2:
+
+To recap, these are the data needed to create the second dashboard: 
+<ol>
+	<li>Total quantity by ingredient</li>
+	<li>Ttotal cost of ingredients</li>
+	<li>Cost price of smoothies</li>
+	<li>Percentage stock remaining by ingredient</li>
+	<li>List of ingreidents to replenish based on remaining stocks</li>
+</ol>
+
+<hr>
+
+
+## Client Inquiry Examples:
+			
+"I was wondering, how many units of each product have been sold?
+
+``` sql
+USE wheytogo;
+
+SELECT
+    i.item_name,
+    SUM(o.quantity) as order_quantity
+FROM orders o
+	LEFT JOIN menu_item i 
+		ON o.item_id = i.item_id
+GROUP BY
+	o.item_id, i.sku, i.item_name
+    
+ORDER BY
+	o.item_id
+
+
+/* Results:
+
+item_name	           | units_sold
+-------------------------------------------
+Dark Cocoa Crunch Blast    | 7
+Dark Cocoa Crunch Blast    | 5
+Vanilla Berry Burst        | 20
+Vanilla Berry Burst        | 6
+Tropical Hulk Fuel         | 8
+Choco Almond Coco Craze    | 3
+Choco Almond Coco Craze    | 6
+Peachy Creamsicle Delight  | 10
+Pineapple Mango Tango      | 12
+Pineapple Mango Tango      | 8
+Kiwi Kickstart Booster     | 5
+Kiwi Kickstart Booster     | 5
+Strawnana                  | 16
+Strawnana                  | 6
+Power Crunch Bar           | 26
+Mighty Muscle Munch        | 40
+Protein Packed Prodigy     | 36
+Energy Blast Bar           | 27
+Protein Fuel Frenzy        | 52
+
+*/
+```
