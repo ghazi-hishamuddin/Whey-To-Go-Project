@@ -201,7 +201,7 @@ FROM orders o
 |...       |...     |...                           |...                  |...                          |...              |
 */
 ```
-The client mentioned that her brother, who assists with logistics, wants to implement a $7.50 fee for delivery orders. To calculate the total sales including the delivery fee, I will create a view using a CTE. This approach is necessary because each order can have multiple items, and adding the delivery fee directly to the previous query would incorrectly apply the fee to each item instead of the entire order.
+The client mentioned that her brother, who assists with logistics, wants to implement a $7.50 fee for delivery orders. To calculate the total sales including the delivery fee, I will create a view using a CTE. This approach is necessary because each order can have multiple items, and adding the delivery fee directly to the previous query would apply the fee to each item instead of the entire order.
 
 ``` SQL
 CREATE VIEW sales_with_delivery AS 
@@ -251,7 +251,7 @@ To recap, these are the data needed to create the second dashboard:
 	<li>List of ingreidents to replenish based on remaining stocks</li>
 </ol>
 
-This objective is more complex compared to the previous one. To accomplish it, I need to calculate inventory usage, identify items requiring reordering, and determine the cost of producing each smoothie based on ingredient costs. This will enable effective monitoring of pricing and profitability. While creating multiple views is not ideal in a BI tool, I will create two views to achieve this objective rather than complicating the process further in the future.
+Compared to the previous objective, this task will be more complex. To accomplish it, I need to calculate inventory usage, identify items requiring reordering, and determine the cost of producing each smoothie based on ingredient costs. This will enable effective monitoring of pricing and profitability. While creating multiple views is not ideal in a BI tool, I will create two views to achieve this objective to avoid complicating the process further in the future.
 
 First I will have to calculate the number of orders created for each smoothie:
 ``` sql
@@ -367,10 +367,10 @@ ORDER BY o.item_id;
 |...      | ...       | ...                              |...            |...                         |...              |...             |...                |...               |
 ```
 
-At this point, I will have to do calculations to find the unit cost and ingredient cost for each ingredient of each smoothie. To do that I will create a subquery named sales1, as "SUM(o.quantity) as order_quantity" is already in the SELECT field. Using a subquery will make the tables tidier. Here is how I went about it:
+At this point, I will have to do calculations to find the unit cost and ingredient cost for each ingredient of each smoothie. To do that, I will create a subquery named sales1, as "SUM(o.quantity) as order_quantity" is already in the SELECT field. Using a subquery will also make the tables tidier. At this point we have completed the following: Total quantity by ingredient, Total cost of ingredients and Cost price of smoothies. I will create a new view for this SQL query for our next points of objective 2.
 
 ``` SQL
-
+CREATE VIEW stock_1 AS
 SELECT
     sales1.item_name,
     sales1.ing_id,
@@ -400,7 +400,7 @@ FROM orders o
 GROUP BY o.item_id, m.sku, r.ing_id, i.ing_name, r.quantity, i.ing_weight, i.ing_price
 ORDER BY o.item_id) sales1
 
-/* Results:
+/* "SELECT * FROM stock_1" would yield:
 
 | item_name                      | ing_id        | ing_name                    | ing_weight        | ing_price        | order_quantity | recipe_quantity | ordered_weight          | unit_cost     | ingredient_cost |
 |--------------------------------|---------------|-----------------------------|-------------------|------------------|----------------|-----------------|-------------------------|---------------|-----------------|
@@ -417,4 +417,104 @@ ORDER BY o.item_id) sales1
 |...                             | ...           | ...                         |...                |...               |...             |...              |...                      |...             |
 ```
 
+I will now move to the final part of the SQL querying which is to determine the ercentage stock remaining by ingredient and creating a list of ingreidents to replenish based on remaining stocks. To do that we will first calculate the ordered_weight from the "stock_1" view we created above.
+
+``` SQL
+SELECT
+    ing_id,
+    ing_name,
+    SUM(ordered_weight) AS ordered_weight
+FROM stock_1
+GROUP BY ing_id, ing_name
+
+/* Results:
+
+| ing_id        | ing_name                    | ordered_weight|
+|---------------|-----------------------------|---------------|
+| 1             | Whole milk                  | 46200         |
+| 3             | Chocolate protein powder    | 885           |
+| 5             | Peanut butter               | 820           |
+| 9             | Dark chocolate cocoa powder | 116           |
+| 11            | Bananas                     | 8640          |
+| 4             | Vanilla protein powder      | 1500          |
+| 12            | Strawberry                  | 6600          |
+| 13            | Blueberry                   | 1600          |
+| 14            | Raspberry                   | 960           |
+| 15            | Blackberry                  | 1210          |
+| 2             | Coconut milk                | 8280          |
+| 10            | Spinach                     | 400           |
+| 16            | Mango                       | 3316          |
+| 17            | Pineapple                   | 3956          |
+| 6             | Almond butter               | 900           |
+| 8             | Ice                         | 2100          |
+| 18            | Peaches                     | 3400          |
+| 19            | Orange                      | 4976          |
+| 7             | Plain Greek yogurt          | 20235         |
+| 20            | Kiwis                       | 3150          |
+| 21            | Power Crunch Bar            | 26            |
+| 22            | Mighty Muscle Munch         | 40            |
+| 23            | Protein Packed Prodigy      | 36            |
+| 24            | Energy Blast Bar            | 27            |
+| 25            | Protein Fuel Frenzy         | 52            |
+```
+Based on the previous table, I can perform the necessary calculations to determine the inventory stock levels. To achieve this, I will join the inventory and ingredient tables. Since the calculation for the ordered weight of each ingredient has been done, the only thing left to do is to calculate the ingredient weight multiplied by the inventory quantity to obtain the available stock the client has. Here's how I did it:
+
+``` SQL
+
+USE wheytogo;
+
+SELECT
+    stock1.ing_name,
+    stock1.ordered_weight,
+    inv.quantity * ing.ing_weight AS total_inv_weight,
+    (inv.quantity * ing.ing_weight) - stock1.ordered_weight AS remaining_weight
+
+
+FROM (SELECT
+	ing_id,
+	ing_name,
+    SUM(ordered_weight) as ordered_weight
+FROM stock_1
+GROUP BY ing_id, ing_name) stock1
+
+LEFT JOIN inventory inv ON stock1.ing_id = inv.item_id
+LEFT JOIN ingredient ing ON stock1.ing_id = ing.ing_id
+
+/* Results:
+
+| ing_name                    | ordered_weight | total_inv_weight | remaining_weight |
+|-----------------------------|----------------|------------------|------------------|
+| Whole milk                  | 46200          | 50000            | 3800             |
+| Plain Greek yogurt          | 20235          | 21000            | 765              |
+| Strawberry                  | 6600           | 12000            | 5400             |
+| Bananas                     | 8640           | 9000             | 360              |
+| Coconut milk                | 8280           | 9000             | 720              |
+| Ice                         | 2100           | 7500             | 5400             |
+| Raspberry                   | 960            | 6000             | 5040             |
+| Mango                       | 3316           | 6000             | 2684             |
+| Pineapple                   | 3956           | 6000             | 2044             |
+| Peaches                     | 3400           | 6000             | 2600             |
+| Orange                      | 4976           | 6000             | 1024             |
+| Kiwis                       | 3150           | 6000             | 2850             |
+| Chocolate protein powder    | 885            | 4000             | 3115             |
+| Blueberry                   | 1600           | 3000             | 1400             |
+| Blackberry                  | 1210           | 3000             | 1790             |
+| Vanilla protein powder      | 1500           | 2000             | 500              |
+| Peanut butter               | 820            | 1000             | 180              |
+| Spinach                     | 400            | 1000             | 600              |
+| Almond butter               | 900            | 1000             | 100              |
+| Dark chocolate cocoa powder | 116            | 500              | 384              |
+| Protein Fuel Frenzy         | 52             | 60               | 8                |
+| Mighty Muscle Munch         | 40             | 50               | 10               |
+| Protein Packed Prodigy      | 36             | 50               | 14               |
+| Energy Blast Bar            | 27             | 50               | 23               |
+| Power Crunch Bar            | 26             | 40               | 14               |
+
+
+*/
+```
+I've also calculated the remaining_weight by subtracting the ordered_weight. This will enable the client to track when to replenish each ingredient.
+
 <hr>
+
+That concludes the custom SQL querying section of the project. Next up, I will do the BI designing using Google Looker!
