@@ -517,4 +517,4 @@ I've also calculated the remaining_weight by subtracting the ordered_weight. Thi
 
 <hr>
 
-That concludes the custom SQL querying section of the project. Next up, I will create the <a href="">BI dashboard</a> using Google Looker!
+That concludes the custom SQL querying section of the project. Next up, I will create the <a href="https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/tree/main/4.%20Dashboard%20Creation">BI dashboard</a> using Google Looker!
