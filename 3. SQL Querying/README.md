@@ -6,8 +6,8 @@ Throughout this phase, we'll dive into the intricacies of SQL querying, focusing
 
 ## Objectives
 There are two objectives aimed in this segment. Sales and inventory data. We want to show ample information on each dashboard to reflect client's data requirements. She has provided a few things she wants to see:
-+ Objective 1: Total orders, total sales, total items sold, average order value, sales per item, top selling items, orders per day, sales per day, orders by address, orders by delivery or pickup 
-+ Objective 2: Inventory Overview: Total quantity by ingredient, total cost of ingredients, cost price of smoothies, percentage stock remaining by ingredient, list of ingreidents to replenish based on remaining stocks
++ Objective 1 (Sales Overview): Total orders, total sales, total items sold, average order value, sales per item, top selling items, orders per day, sales per day, orders by address, orders by delivery or pickup 
++ Objective 2 (Inventory Overview): Total quantity by ingredient, total cost of ingredients, cost price of smoothies, percentage stock remaining by ingredient, list of ingreidents to replenish based on remaining stocks
 <hr>
 
 ## Creating Database and Tables
@@ -517,4 +517,4 @@ I've also calculated the remaining_weight by subtracting the ordered_weight. Thi
 
 <hr>
 
-That concludes the custom SQL querying section of the project. Next up, I will do the BI designing using Google Looker!
+That concludes the custom SQL querying section of the project. Next up, I will create the <a href="">BI dashboard</a> using Google Looker!
