@@ -185,6 +185,21 @@ FROM orders o
 		ON o.item_id = m.item_id
 	LEFT JOIN address a
 		ON o.add_id = a.add_id;
+
+/* Results:
+
+| order_id | sales  | item_name                    | order_date          | address                     | delivery_status |
+|----------|--------|------------------------------|---------------------|-----------------------------|-----------------|
+| 1001     | 18.70  | Vanilla Berry Burst (Large)  | 2024-01-02 08:23:00 | 123 Orchard Road            | 0               |
+| 1001     | 5.75   | Mighty Muscle Munch          | 2024-01-02 08:23:00 | 123 Orchard Road            | 0               |
+| 1002     | 14.70  | Pineapple Mango Tango (Reg)  | 2024-01-03 10:45:00 | 456 Marina Bay Sands #12-34 | 1               |
+| 1002     | 6.00   | Protein Fuel Frenzy          | 2024-01-03 10:45:00 | 456 Marina Bay Sands #12-34 | 1               |
+| 1002     | 5.00   | Power Crunch Bar             | 2024-01-03 10:45:00 | 456 Marina Bay Sands #12-34 | 1               |
+| 1003     | 19.50  | Strawnana (Large)            | 2024-01-04 12:15:00 | 789 Sentosa Cove            | 1               |
+| 1003     | 6.00   | Protein Packed Prodigy       | 2024-01-04 12:15:00 | 789 Sentosa Cove            | 1               |
+| 1003     | 5.00   | Energy Blast Bar             | 2024-01-04 12:15:00 | 789 Sentosa Cove            | 1               |
+|...       |...     |...                           |...                  |...                          |...              |
+*/
 ```
 The client mentioned that her brother, who assists with logistics, wants to implement a $7.50 fee for delivery orders. To calculate the total sales including the delivery fee, I will create a view using a CTE. This approach is necessary because each order can have multiple items, and adding the delivery fee directly to the previous query would incorrectly apply the fee to each item instead of the entire order.
 
@@ -207,6 +222,20 @@ CREATE VIEW sales_with_delivery AS
 		CASE WHEN delivery = 1 THEN sales + 7.50 ELSE sales END as sales_with_delivery
 	FROM sales_data;
 
+/* "SELECT * FROM sales_with_delivery" will yield
+
+| order_id | sales | delivery | sales_with_delivery |
+|----------|-------|----------|---------------------|
+| 1001     | 35.95 | 0        | 35.95               |
+| 1002     | 61.40 | 1        | 68.90               |
+| 1003     | 35.50 | 1        | 43.00               |
+| 1004     | 51.40 | 1        | 58.90               |
+| 1005     | 45.00 | 0        | 45.00               |
+| 1006     | 40.90 | 1        | 48.40               |
+| 1007     | 13.50 | 1        | 21.00               |
+|...       |...    |...       |...                  |
+
+*/
 ```
 
 <hr>
@@ -373,8 +402,8 @@ ORDER BY o.item_id) sales1
 
 /* Results:
 
-| item_name                 | ing_id             | ing_name                    | ing_weight        | ing_price        | order_quantity | recipe_quantity | ordered_weight          | unit_cost     | ingredient_cost |
-|---------------------------|--------------------|-----------------------------|-------------------|------------------|----------------|-----------------|-------------------------|---------------|-----------------|
+| item_name                      | ing_id        | ing_name                    | ing_weight        | ing_price        | order_quantity | recipe_quantity | ordered_weight          | unit_cost     | ingredient_cost |
+|--------------------------------|---------------|-----------------------------|-------------------|------------------|----------------|-----------------|-------------------------|---------------|-----------------|
 | Dark Cocoa Crunch Blast (Reg)  | 1             | Whole milk                  | 2000              | 7.23             | 7              | 360             | 2520                    | 0.003615      | 9.109800        |
 | Dark Cocoa Crunch Blast (Reg)  | 3             | Chocolate protein powder    | 2000              | 70.21            | 7              | 30              | 210                     | 0.035105      | 7.372050        |
 | Dark Cocoa Crunch Blast (Reg)  | 5             | Peanut butter               | 500               | 8.21             | 7              | 60              | 420                     | 0.016420      | 6.896400        |
