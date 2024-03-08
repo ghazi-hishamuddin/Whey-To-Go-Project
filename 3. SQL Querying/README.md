@@ -186,6 +186,29 @@ FROM orders o
 	LEFT JOIN address a
 		ON o.add_id = a.add_id;
 ```
+The client mentioned that her brother, who assists with logistics, wants to implement a $7.50 fee for delivery orders. To calculate the total sales including the delivery fee, I will create a view using a CTE. This approach is necessary because each order can have multiple items, and adding the delivery fee directly to the previous query would incorrectly apply the fee to each item instead of the entire order.
+
+``` SQL
+CREATE VIEW sales_with_delivery AS 
+	WITH sales_data AS (
+		SELECT 
+			o.order_id,
+			SUM(m.item_price * o.quantity) AS sales,
+			o.delivery
+		FROM orders o
+			LEFT JOIN menu_item m ON o.item_id = m.item_id
+			LEFT JOIN address a ON o.add_id = a.add_id
+		GROUP BY o.order_id, o.delivery
+	)
+	SELECT 
+		order_id,
+		sales,
+		delivery,
+		CASE WHEN delivery = 1 THEN sales + 7.50 ELSE sales END as sales_with_delivery
+	FROM sales_data;
+
+```
+
 <hr>
 
 ## Objective 2:
@@ -193,58 +216,176 @@ FROM orders o
 To recap, these are the data needed to create the second dashboard: 
 <ol>
 	<li>Total quantity by ingredient</li>
-	<li>Ttotal cost of ingredients</li>
+	<li>Total cost of ingredients</li>
 	<li>Cost price of smoothies</li>
 	<li>Percentage stock remaining by ingredient</li>
 	<li>List of ingreidents to replenish based on remaining stocks</li>
 </ol>
 
-<hr>
+This objective is more complex compared to the previous one. To accomplish it, I need to calculate inventory usage, identify items requiring reordering, and determine the cost of producing each smoothie based on ingredient costs. This will enable effective monitoring of pricing and profitability. While creating multiple views is not ideal in a BI tool, I will create two views to achieve this objective rather than complicating the process further in the future.
 
-
-## Client Inquiry Examples:
-			
-"I was wondering, how many units of each product have been sold?
-
+First I will have to calculate the number of orders created for each smoothie:
 ``` sql
 USE wheytogo;
 
 SELECT
-    i.item_name,
+    o.item_id,
+    m.sku,
+    m.item_name,
     SUM(o.quantity) as order_quantity
-FROM orders o
-	LEFT JOIN menu_item i 
-		ON o.item_id = i.item_id
-GROUP BY
-	o.item_id, i.sku, i.item_name
-    
-ORDER BY
-	o.item_id
+FROM orders o 
+	LEFT JOIN menu_item m ON o.item_id = m.item_id
+GROUP BY o.item_id, m.sku
+ORDER BY o.item_id;
 
 
 /* Results:
 
-item_name	           | units_sold
--------------------------------------------
-Dark Cocoa Crunch Blast    | 7
-Dark Cocoa Crunch Blast    | 5
-Vanilla Berry Burst        | 20
-Vanilla Berry Burst        | 6
-Tropical Hulk Fuel         | 8
-Choco Almond Coco Craze    | 3
-Choco Almond Coco Craze    | 6
-Peachy Creamsicle Delight  | 10
-Pineapple Mango Tango      | 12
-Pineapple Mango Tango      | 8
-Kiwi Kickstart Booster     | 5
-Kiwi Kickstart Booster     | 5
-Strawnana                  | 16
-Strawnana                  | 6
-Power Crunch Bar           | 26
-Mighty Muscle Munch        | 40
-Protein Packed Prodigy     | 36
-Energy Blast Bar           | 27
-Protein Fuel Frenzy        | 52
+| item_name                        | sku       | order_quantity|
+|----------------------------------|-----------|---------------|
+| Dark Cocoa Crunch Blast (Reg)    | SMT-DCB-M | 7             |
+| Dark Cocoa Crunch Blast (Large)  | SMT-DCB-L | 5             |
+| Vanilla Berry Burst (Reg)        | SMT-VBB-M | 20            |
+| Vanilla Berry Burst (Large)      | SMT-VBB-L | 6             |
+| Tropical Hulk Fuel (Reg)         | SMT-THF-M | 8             |
+| Choco Almond Coco Craze (Reg)    | SMT-CAC-M | 3             |
+| Choco Almond Coco Craze (Large)  | SMT-CAC-L | 6             |
+| Peachy Creamsicle Delight (Reg)  | SMT-PCD-M | 10            |
+| Pineapple Mango Tango (Reg)      | SMT-PMT-M | 12            |
+| Pineapple Mango Tango (Large)    | SMT-PMT-L | 8             |
+| Kiwi Kickstart Booster (Reg)     | SMT-KKB-M | 5             |
+| Kiwi Kickstart Booster (Large)   | SMT-KKB-L | 5             |
+| Strawnana (Reg)                  | SMT-SNN-M | 16            |
+| Strawnana (Large)                | SMT-SNN-L | 6             |
+| Power Crunch Bar                 | PTB-PCB   | 26            |
+| Mighty Muscle Munch              | PTB-MMM   | 40            |
+| Protein Packed Prodigy           | PTB-PPP   | 36            |
+| Energy Blast Bar                 | PTB-EBB   | 27            |
+| Protein Fuel Frenzy              | PTB-PFF   | 52            |
 
 */
 ```
+Moving on, I will need to break down the smoothies by ingredient. That can be done by left joining to the recipe table. This query will provide the breakdown of each smoothie with their ing_id. 
+``` sql
+SELECT
+    o.item_id,
+    m.sku,
+    m.item_name,
+    r.ing_id,
+    r.quantity AS recipe_quantity,
+    SUM(o.quantity) AS order_quantity
+FROM orders o 
+	LEFT JOIN menu_item m ON o.item_id = m.item_id
+    LEFT JOIN recipe r ON m.sku = r.recipe_id
+GROUP BY o.item_id, m.sku, r.ing_id, r.quantity
+ORDER BY o.item_id;
+
+
+/* Results:
+
+| item_id | sku       | item_name                        | ing_id        | recipe_quantity | order_quantity |
+|---------|-----------|----------------------------------|---------------|-----------------|----------------|
+| 1       | SMT-DCB-M | Dark Cocoa Crunch Blast (Reg)    | 1             | 360             | 7              |
+| 1       | SMT-DCB-M | Dark Cocoa Crunch Blast (Reg)    | 3             | 30              | 7              |
+| 1       | SMT-DCB-M | Dark Cocoa Crunch Blast (Reg)    | 5             | 60              | 7              |
+| 1       | SMT-DCB-M | Dark Cocoa Crunch Blast (Reg)    | 9             | 8               | 7              |
+| 1       | SMT-DCB-M | Dark Cocoa Crunch Blast (Reg)    | 11            | 240             | 7              |
+| 2       | SMT-DCB-L | Dark Cocoa Crunch Blast (Large)  | 1             | 600             | 5              |
+| 2       | SMT-DCB-L | Dark Cocoa Crunch Blast (Large)  | 3             | 45              | 5              |
+| 2       | SMT-DCB-L | Dark Cocoa Crunch Blast (Large)  | 5             | 80              | 5              |
+| 2       | SMT-DCB-L | Dark Cocoa Crunch Blast (Large)  | 9             | 12              | 5              |
+| 2       | SMT-DCB-L | Dark Cocoa Crunch Blast (Large)  | 11            | 360             | 5              |
+| ...     | ...       |...                               |...            |...              |...             |
+
+*/
+```
+
+To obtain the ingredient names and calculate the cost and ingredient cost, I need to left join the ingredient table. The ingredient table contains the necessary information, such as ingredient names, weights, and prices, required for unit cost and ingredient cost calculations.
+
+``` SQL
+
+SELECT
+    o.item_id,
+    m.sku,
+    m.item_name,
+    r.ing_id,
+    i.ing_name,
+    r.quantity AS recipe_quantity,
+    SUM(o.quantity) AS order_quantity,
+    i.ing_weight,
+    i.ing_price
+FROM orders o 
+	LEFT JOIN menu_item m ON o.item_id = m.item_id
+    LEFT JOIN recipe r ON m.sku = r.recipe_id
+	LEFT JOIN ingredient i ON r.ing_id = i.ing_id
+GROUP BY o.item_id, m.sku, r.ing_id, i.ing_name, r.quantity, i.ing_weight, i.ing_price
+ORDER BY o.item_id;
+
+/* Results:
+
+| item_id | sku       | item_name                        | ing_id        | ing_name                   | recipe_quantity | order_quantity | ing_weight        | ing_price        |
+|---------|-----------|----------------------------------|---------------|--------------------------- |-----------------|----------------|-------------------|------------------|
+| 1       | SMT-DCB-M | Dark Cocoa Crunch Blast (Reg)    | 1             | Whole milk                 | 360             | 7              | 2000              | 7.23             |
+| 1       | SMT-DCB-M | Dark Cocoa Crunch Blast (Reg)    | 3             | Chocolate protein powder   | 30              | 7              | 2000              | 70.21            |
+| 1       | SMT-DCB-M | Dark Cocoa Crunch Blast (Reg)    | 5             | Peanut butter              | 60              | 7              | 500               | 8.21             |
+| 1       | SMT-DCB-M | Dark Cocoa Crunch Blast (Reg)    | 9             | Dark chocolate cocoa powder| 8               | 7              | 250               | 6.61             |
+| 1       | SMT-DCB-M | Dark Cocoa Crunch Blast (Reg)    | 11            | Bananas                    | 240             | 7              | 3000              | 10.84            |
+| 2       | SMT-DCB-L | Dark Cocoa Crunch Blast (Large)  | 1             | Whole milk                 | 600             | 5              | 2000              | 7.23             |
+| 2       | SMT-DCB-L | Dark Cocoa Crunch Blast (Large)  | 3             | Chocolate protein powder   | 45              | 5              | 2000              | 70.21            |
+| 2       | SMT-DCB-L | Dark Cocoa Crunch Blast (Large)  | 5             | Peanut butter              | 80              | 5              | 500               | 8.21             |
+| 2       | SMT-DCB-L | Dark Cocoa Crunch Blast (Large)  | 9             | Dark chocolate cocoa powder| 12              | 5              | 250               | 6.61             |
+| 2       | SMT-DCB-L | Dark Cocoa Crunch Blast (Large)  | 11            | Bananas                    | 360             | 5              | 3000              | 10.84            |
+|...      | ...       | ...                              |...            |...                         |...              |...             |...                |...               |
+```
+
+At this point, I will have to do calculations to find the unit cost and ingredient cost for each ingredient of each smoothie. To do that I will create a subquery named sales1, as "SUM(o.quantity) as order_quantity" is already in the SELECT field. Using a subquery will make the tables tidier. Here is how I went about it:
+
+``` SQL
+
+SELECT
+    sales1.item_name,
+    sales1.ing_id,
+    sales1.ing_name,
+    sales1.ing_weight,
+    sales1.ing_price,
+    sales1.order_quantity,
+    sales1.recipe_quantity,
+    sales1.order_quantity * sales1.recipe_quantity AS ordered_weight,
+    sales1.ing_price/sales1.ing_weight AS unit_cost,
+    (sales1.order_quantity * sales1.recipe_quantity) * (sales1.ing_price/sales1.ing_weight) AS ingredient_cost
+
+FROM (SELECT
+    o.item_id,
+    m.sku,
+    m.item_name,
+    r.ing_id,
+    i.ing_name,
+    r.quantity AS recipe_quantity,
+    SUM(o.quantity) AS order_quantity,
+    i.ing_weight,
+    i.ing_price
+FROM orders o 
+    LEFT JOIN menu_item m ON o.item_id = m.item_id
+    LEFT JOIN recipe r ON m.sku = r.recipe_id
+    LEFT JOIN ingredient i ON r.ing_id = i.ing_id
+GROUP BY o.item_id, m.sku, r.ing_id, i.ing_name, r.quantity, i.ing_weight, i.ing_price
+ORDER BY o.item_id) sales1
+
+/* Results:
+
+| item_name                 | ing_id             | ing_name                    | ing_weight        | ing_price        | order_quantity | recipe_quantity | ordered_weight          | unit_cost     | ingredient_cost |
+|---------------------------|--------------------|-----------------------------|-------------------|------------------|----------------|-----------------|-------------------------|---------------|-----------------|
+| Dark Cocoa Crunch Blast (Reg)  | 1             | Whole milk                  | 2000              | 7.23             | 7              | 360             | 2520                    | 0.003615      | 9.109800        |
+| Dark Cocoa Crunch Blast (Reg)  | 3             | Chocolate protein powder    | 2000              | 70.21            | 7              | 30              | 210                     | 0.035105      | 7.372050        |
+| Dark Cocoa Crunch Blast (Reg)  | 5             | Peanut butter               | 500               | 8.21             | 7              | 60              | 420                     | 0.016420      | 6.896400        |
+| Dark Cocoa Crunch Blast (Reg)  | 9             | Dark chocolate cocoa powder | 250               | 6.61             | 7              | 8               | 56                      | 0.026440      | 1.480640        |
+| Dark Cocoa Crunch Blast (Reg)  | 11            | Bananas                     | 3000              | 10.84            | 7              | 240             | 1680                    | 0.003613      | 6.070399        |
+| Dark Cocoa Crunch Blast (Large)| 1             | Whole milk                  | 2000              | 7.23             | 5              | 600             | 3000                    | 0.003615      | 10.845000       |
+| Dark Cocoa Crunch Blast (Large)| 3             | Chocolate protein powder    | 2000              | 70.21            | 5              | 45              | 225                     | 0.035105      | 7.898625        |
+| Dark Cocoa Crunch Blast (Large)| 5             | Peanut butter               | 500               | 8.21             | 5              | 80              | 400                     | 0.016420      | 6.568000        |
+| Dark Cocoa Crunch Blast (Large)| 9             | Dark chocolate cocoa powder | 250               | 6.61             | 5              | 12              | 60                      | 0.026440      | 1.586400        |
+| Dark Cocoa Crunch Blast (Large)| 11            | Bananas                     | 3000              | 10.84            | 5              | 360             | 1800                    | 0.003613      | 6.503999        |
+|...                             | ...           | ...                         |...                |...               |...             |...              |...                      |...             |
+```
+
+<hr>
