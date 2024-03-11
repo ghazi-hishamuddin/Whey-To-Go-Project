@@ -181,10 +181,8 @@ SELECT
     o.delivery
    
 FROM orders o
-	LEFT JOIN menu_item m
-		ON o.item_id = m.item_id
-	LEFT JOIN address a
-		ON o.add_id = a.add_id;
+	LEFT JOIN menu_item m ON o.item_id = m.item_id
+	LEFT JOIN address a ON o.add_id = a.add_id;
 
 /* Results:
 
@@ -305,7 +303,7 @@ SELECT
     SUM(o.quantity) AS order_quantity
 FROM orders o 
 	LEFT JOIN menu_item m ON o.item_id = m.item_id
-    LEFT JOIN recipe r ON m.sku = r.recipe_id
+    	LEFT JOIN recipe r ON m.sku = r.recipe_id
 GROUP BY o.item_id, m.sku, r.ing_id, r.quantity
 ORDER BY o.item_id;
 
@@ -345,7 +343,7 @@ SELECT
     i.ing_price
 FROM orders o 
 	LEFT JOIN menu_item m ON o.item_id = m.item_id
-    LEFT JOIN recipe r ON m.sku = r.recipe_id
+    	LEFT JOIN recipe r ON m.sku = r.recipe_id
 	LEFT JOIN ingredient i ON r.ing_id = i.ing_id
 GROUP BY o.item_id, m.sku, r.ing_id, i.ing_name, r.quantity, i.ing_weight, i.ing_price
 ORDER BY o.item_id;
@@ -473,7 +471,7 @@ SELECT
 FROM (SELECT
 	ing_id,
 	ing_name,
-    SUM(ordered_weight) as ordered_weight
+    	SUM(ordered_weight) as ordered_weight
 FROM stock_1
 GROUP BY ing_id, ing_name) stock1
 
