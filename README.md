@@ -16,3 +16,4 @@ In this repo, you can find different folders discussing my thought-process in ea
 
 ## Dashboard
 
+<iframe width="600" height="450" src="https://lookerstudio.google.com/embed/reporting/a2667a34-1454-4193-958c-2ea16b77f9db/page/p_uasbqyc0ed" frameborder="0" style="border:0" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
