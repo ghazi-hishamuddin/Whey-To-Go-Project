@@ -461,6 +461,8 @@ Based on the previous table, I can perform the necessary calculations to determi
 
 USE wheytogo;
 
+CREATE VIEW stock_2 AS
+
 SELECT
     stock1.ing_name,
     stock1.ordered_weight,
