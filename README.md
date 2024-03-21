@@ -7,7 +7,7 @@ In this repo, you can find different folders discussing my thought-process in ea
 + <a href="https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/tree/main/1.%20Project%20Brief">Project Brief </a>
 + <a href="https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/tree/main/2.%20Schema%20Design">Schema Design </a>
 + <a href="https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/tree/main/3.%20SQL%20Querying">SQL Querying</a>
-+ Dashboard Creation
++ <a href="https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/tree/main/4.%20Dashboard%20Creation">Dashboard Creation</a>
 
 ## Tools Used
 + Microsoft Excel
