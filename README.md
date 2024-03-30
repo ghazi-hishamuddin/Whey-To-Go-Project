@@ -17,6 +17,10 @@ In this repo, you can find different folders discussing my thought-process in ea
 ## Dashboard
 Link to Dashboard: https://lookerstudio.google.com/reporting/a2667a34-1454-4193-958c-2ea16b77f9db
 
-![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/0354c027-ef1d-4419-b4ec-fb9f6e281418)
-![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/d19a7e0f-4cb2-4802-9a92-9280fdd6e703)
+Sales Report:
+![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/074c1252-22a0-40a3-b601-4556f350376f)
+
+Inventory Report:
+![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/313c5953-6124-422c-a8b1-de4c2681ae95)
+
 
