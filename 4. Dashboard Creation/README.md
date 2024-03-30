@@ -5,7 +5,7 @@ Welcome to the Dashboard Creation phase of the project. In this repo, I'll guide
 Throughout this phase, we'll dive into the intricacies of SQL querying, focusing on extracting and manipulating the data needed for the dashboard. I'll be using MySQL server and workbench.
 
 ## Page 1: Sales Dashboard
-![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/ff3a0793-646c-484c-8c66-573bccf12440)
+![WheyToGo](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/49d2cc37-b0a8-447f-a811-12c8ef8a0709)
 1. <b> Key Performance Indicators</b>: This section presents several key metrics, including total sales, average order value, total items ordered, and earnings from delivery. The numerical values provide quantitative insights into business performance.
 2. <b>Date Filtering</b>: This dropdown box provides the option to filter to each month.
 3. <b>Total Sales</b>: The line chart displays the total sales over time, with peaks indicating periods of high sales volume. The chart shows fluctuations, suggesting varying demand patterns.
