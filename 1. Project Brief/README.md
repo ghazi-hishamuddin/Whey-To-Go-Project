@@ -4,7 +4,7 @@ Client: Wei Xuan </br>
 Business: Online Protein Smoothie Store
 
 ## Project Description
-Wei Xuan, the founder of a successful protein smoothie business on Instagram, seeks to transition towards a data-centric approach. Recognizing the limitations of manual processes, she aims to leverage data analytics and management to enhance efficiency and drive growth.
+Wei Xuan, the founder of a successful protein smoothie online business, seeks to transition towards a data-centric approach. Recognizing the limitations of manual processes, she aims to leverage data analytics and management to enhance efficiency and drive growth.
 
 ## Objective
 The project involves two main tasks:
