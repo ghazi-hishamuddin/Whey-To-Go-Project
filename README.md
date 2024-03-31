@@ -23,4 +23,9 @@ Sales Report:
 Inventory Report:
 ![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/313c5953-6124-422c-a8b1-de4c2681ae95)
 
+## Future Iterations
+WheyToGo lacks operational efficiency. As most of the data are manually stored in Google Cloud and MySQL server, improvements can be made by automating the extraction, transformation, and loading (ETL) processes. ETL pipelines can save time, reduce errors, and enable more frequent data refreshes (current dashboard isn't updated in real time). Here would be my suggestion to automate the ETL process of WheyToGo:
+
+![image](https://github.com/ghazi-hishamuddin/Whey-To-Go-Project/assets/142828521/4c986921-cb5b-4fba-b76b-f5dbfbe1f433)
+
 
